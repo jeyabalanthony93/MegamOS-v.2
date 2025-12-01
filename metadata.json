@@ -1,0 +1,5 @@
+{
+  "name": "MegamOS.v2",
+  "description": "An AI-powered, browser-based Linux OS simulation featuring unlimited virtual storage, cloud workspace tools, and multi-agent hierarchy management.",
+  "requestFramePermissions": []
+}
