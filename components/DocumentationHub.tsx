@@ -218,7 +218,7 @@ const DocumentationHub: React.FC = () => {
           <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
               <h3 className="font-bold text-white mb-4 flex items-center gap-2"><DollarSign size={20} className="text-green-400"/> The Build Budget Calculator</h3>
               <p className="text-sm text-slate-400 mb-4">
-                  Use the integrated <strong>Server Admin > FinOps</strong> tool to visualize your exact savings based on user count and storage needs. 
+                  Use the integrated <strong>Server Admin &gt; FinOps</strong> tool to visualize your exact savings based on user count and storage needs. 
                   Most enterprises save <strong>70-90%</strong> by switching to the Megam Stack.
               </p>
           </div>

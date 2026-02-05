@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: megamos_postgres
+    environment:
+      POSTGRES_USER: megamos
+      POSTGRES_PASSWORD: megamos_secure_password
+      POSTGRES_DB: megamos_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U megamos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - megamos_network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: megamos_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - megamos_network
+
+  # Python Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: megamos_backend
+    environment:
+      DEBUG: "False"
+      ENVIRONMENT: "production"
+      DATABASE_URL: "postgresql://megamos:megamos_secure_password@postgres:5432/megamos_db"
+      REDIS_URL: "redis://redis:6379/0"
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      SECRET_KEY: ${SECRET_KEY}
+      ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:80,https://yourdomain.com"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - backend_logs:/app/logs
+    networks:
+      - megamos_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # React Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: megamos_frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
+    networks:
+      - megamos_network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MongoDB (Optional - for document storage)
+  mongodb:
+    image: mongo:7
+    container_name: megamos_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: megamos
+      MONGO_INITDB_ROOT_PASSWORD: megamos_mongo_password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - megamos_network
+    profiles:
+      - optional
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  backend_logs:
+    driver: local
+
+networks:
+  megamos_network:
+    driver: bridge

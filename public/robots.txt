@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.env
+Disallow: /.git
+Disallow: /node_modules/
+Disallow: /backend/
+Disallow: /logs/
+
+# Specific rules for search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Rate limiting for bots
+User-agent: *
+Crawl-delay: 1
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
