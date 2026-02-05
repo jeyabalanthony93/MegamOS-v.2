@@ -1,4 +1,4 @@
 import React from 'react';
-import MegamOSAdvanced from './MegamOSAdvanced';
+import MegamOSFull from './MegamOSFull';
 
-export default MegamOSAdvanced;
+export default MegamOSFull;
