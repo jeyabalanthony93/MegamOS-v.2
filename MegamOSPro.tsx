@@ -127,18 +127,17 @@ const MegamOSPro = () => {
   const visibleWindows = Object.entries(windows).filter(([_, w]) => !w.isMinimized);
 
   return (
-    <div className={`w-screen h-screen overflow-hidden ${isDarkMode ? 'bg-gray-950 text-white' : 'bg-white text-gray-900'}`}>
+    <div className="fixed inset-0 w-full h-full overflow-hidden" style={{ background: isDarkMode ? '#0f172a' : '#f8fafc' }}>
       {/* Animated Background */}
       <motion.div
         className="absolute inset-0 -z-10"
-        animate={{
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{
           background: isDarkMode
-            ? ['linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
-               'linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%)']
-            : ['linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%)',
-               'linear-gradient(135deg, #e2e8f0 0%, #f8fafc 50%, #e2e8f0 100%)']
+            ? 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)'
+            : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%)'
         }}
-        transition={{ duration: 8, repeat: Infinity }}
       />
 
       {/* Floating Particles */}
@@ -176,7 +175,8 @@ const MegamOSPro = () => {
 
       {/* Taskbar */}
       <motion.div
-        className={`absolute bottom-0 left-0 right-0 h-24 ${isDarkMode ? 'bg-slate-900/95' : 'bg-white/95'} backdrop-blur-xl border-t ${isDarkMode ? 'border-slate-700' : 'border-gray-200'} flex items-center justify-between px-6 z-40`}
+        className={`absolute bottom-0 left-0 right-0 h-24 ${isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-gray-200'} backdrop-blur-xl border-t flex items-center justify-between px-6 z-40`}
+        style={{ color: isDarkMode ? '#fff' : '#000' }}
       >
         {/* Start Menu */}
         <div className="relative">
@@ -284,6 +284,7 @@ const MegamOSPro = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+          style={{ color: isDarkMode ? '#fff' : '#000' }}
         >
           <motion.div
             animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
