@@ -1,4 +1,4 @@
 import React from 'react';
-import MegamOSProFunctional from './MegamOSProFunctional';
+import MegamOSProComplete from './MegamOSProComplete';
 
-export default MegamOSProFunctional;
+export default MegamOSProComplete;
