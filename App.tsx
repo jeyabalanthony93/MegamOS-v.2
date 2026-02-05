@@ -1,4 +1,4 @@
 import React from 'react';
-import MegamOSBeautiful from './MegamOSBeautiful';
+import MegamOSPro from './MegamOSPro';
 
-export default MegamOSBeautiful;
+export default MegamOSPro;
